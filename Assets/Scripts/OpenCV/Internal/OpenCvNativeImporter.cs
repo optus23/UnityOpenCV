@@ -31,12 +31,17 @@ internal static class OpenCvNativeImporter
     public static extern void cvSmooth(
         IntPtr src,
         IntPtr dst,
-        int smoothtype,
+        SmoothType smoothtype,
         int size1,
         int size2,
         double sigmaX,
         double sigmaY );
-
+    
+    [DllImport(OpenCvLibrary, CallingConvention = CallingConvention.Cdecl)]
+    public static extern void cvCvtColor(
+        IntPtr src, IntPtr dst, ColorConversion code
+    );
+    
     [DllImport( OpenCvLibrary, CallingConvention = CallingConvention.Cdecl )]
     public static extern void cvReleaseImageHeader( ref IntPtr image );
 }
