@@ -6,10 +6,18 @@ namespace OpenCV
 /// </summary>
 public static class CvConstants
 {
-    // Image depth (bits per channel)
-    // from IPL_DEPTH_8U
+    // Image depth (bits per channel) from IPL_DEPTH_8U
     public const int Depth8U = 8;
-
+    
+    // Line‐type flag from CV_LINE_8
+    public const int CvLine8 = 8;
+    
+    // Interpolation flag from CV_INTER_LINEAR
+    public const int CvInterLinear = 1;
+    
+    // Matrix element type code from CV_32FC1
+    public const int Cv32Fc1 = 5;
+    
     // Channel counts
     public const int ChannelsBgr = 3;  // B, G, R
     public const int ChannelsGray = 1; // single-channel (grayscale)

@@ -1,33 +1,36 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+
 namespace OpenCV
 {
 
 public class GaussianBlurFilter : MonoBehaviour
 {
-    public RawImage CanvasImage;
-    public Texture2D SourceTexture;
     public int KernelSize = 5;
     public double SigmaX = 1.0;
     public double SigmaY = 0.0;
- 
+    public OpenCvManager CvManager;
+    
+    private Texture2D m_SourceTexture;
     private Texture2D m_ResultTexture;
-
-
+    
     private void Start()
     {
         // Create output texture
-        m_ResultTexture = new Texture2D( SourceTexture.width, SourceTexture.height, SourceTexture.format, false );
+        m_ResultTexture = new Texture2D( CvManager.SourceTexture.width, CvManager.SourceTexture.height, CvManager.SourceTexture.format, false );
     }
 
     public void ApplyGaussianBlur()
     {
-        int w = SourceTexture.width, h = SourceTexture.height;
+        // Get actual state of texture to stack filters
+        m_SourceTexture = CvManager.DestinationTexture != null ? CvManager.DestinationTexture : CvManager.SourceTexture;
+        int w = m_SourceTexture.width, h = m_SourceTexture.height;
         
         // Read and convert to BGR array
-        Color32[] pixels = SourceTexture.GetPixels32();
+        Color32[] pixels = m_SourceTexture.GetPixels32();
         byte[] bgrData = new byte[pixels.Length * CvConstants.ChannelsBgr];
 
         for ( int i = 0; i < pixels.Length; i++ )
@@ -67,7 +70,7 @@ public class GaussianBlurFilter : MonoBehaviour
         m_ResultTexture.SetPixels32( outPixels );
         m_ResultTexture.Apply();
 
-        CanvasImage.texture = m_ResultTexture;
+        CvManager.UpdateDestinationImage(m_ResultTexture);
 
         // Cleanup
         handleSrc.Free();
